@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -17,10 +18,32 @@ struct Exam_record
     int exam_mark;
 };
 
+int score_to_mark(int summary_score);
+
+void insert_record(vector<Exam_record>& records, int stud_id, int exam_id, int exam_score, int activity_score);
+void insert_record(vector<Exam_record>& records);
+void change_exam_score(vector<Exam_record>& records);
+void print_records(vector<Exam_record>& records);
+void print_records(vector<Exam_record>& records, int stud_id);
+void print_records(vector<Exam_record>& records, int exam_id);
+void print_records(vector<Exam_record>& records,int stud_id, int exam_id);
+
+
 int main()
 {
     vector<Exam_record> records;
+    insert_record(records, 1, 0, 43, 20);
+    insert_record(records, 1, 1, 39, 18);
+    insert_record(records, 2, 0, 18, 3);
+    insert_record(records, 2, 1, 43, 20);
+    insert_record(records, 2, 2, 22, 7);
+    //change_exam_score(records);
+    //insert_record(records);
+    print_records(records);
+    cout << endl;
+    print_records(records, 2);
     
+    cout << "done" << endl;
     return 0;
 }
 
@@ -36,7 +59,7 @@ int score_to_mark(int summary_score)
 }
 
 
-void insert_record(vector<Exam_record> records, int stud_id, int exam_id, int exam_score, int activity_score) 
+void insert_record(vector<Exam_record>& records, int stud_id, int exam_id, int exam_score, int activity_score) 
 {
     Exam_record newRecord = {stud_id, exam_id, exam_score, activity_score, score_to_mark(exam_score + activity_score)};
     bool flag = true; // the records is not a dublicate
@@ -53,7 +76,7 @@ void insert_record(vector<Exam_record> records, int stud_id, int exam_id, int ex
     }
     if (flag) records.push_back(newRecord);
 }
-void insert_record(vector<Exam_record> records) // input with a keyboard
+void insert_record(vector<Exam_record>& records) // input with a keyboard
 {
     int stud_id, exam_id, exam_score, activity_score;
     cout << "insert student's id" << endl;
@@ -70,7 +93,7 @@ void insert_record(vector<Exam_record> records) // input with a keyboard
 }
 
 
-void change_exam_score(vector<Exam_record> records)
+void change_exam_score(vector<Exam_record>& records)
 {
     int stud_id, exam_id, exam_score;
     cout << "insert student's id" << endl;
@@ -96,18 +119,41 @@ void change_exam_score(vector<Exam_record> records)
 }
 
 
-void print_records(vector<Exam_record> records)
+void print_records(vector<Exam_record>& records)//printing all
 {
-    sort(records.begin(), records.end(), []()) //do it with lambda  stud_id1 <  stud_id2
+    sort(records.begin(), records.end(), [](Exam_record a, Exam_record b){
+        return (a.stud_id <= b.stud_id);
+    });
+    
+    for(int i = 0; i < records.size(); i++)
+    {
+        cout << "student: " << records[i].stud_id << ", discipline: " << disciplines[records[i].exam_id] << ", exam score: "
+        << records[i].exam_score << ", activity_score: " << records[i].activity_score << ", mark: " << records[i].exam_mark << endl;
+    }
 }
+void print_records(vector<Exam_record>& records, int stud_id) //printing all for one student
+{
+    sort(records.begin(), records.end(), [](Exam_record a, Exam_record b){
+        return (a.stud_id <= b.stud_id);
+    });
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+    for(int i = 0; i < records.size(); i++)
+    {
+        if(records[i].stud_id == stud_id) cout << "student: " << records[i].stud_id << ", discipline: " << disciplines[records[i].exam_id] 
+        << ", exam score: " << records[i].exam_score << ", activity_score: " << records[i].activity_score
+        << ", mark: " << records[i].exam_mark << endl;
+    }
+}
+void print_records(vector<Exam_record>& records,int stud_id, int exam_id) //printing one exam for one student
+{
+    sort(records.begin(), records.end(), [](Exam_record a, Exam_record b){
+        return (a.stud_id <= b.stud_id);
+    });
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+    for(int i = 0; i < records.size(); i++)
+    {
+        if(records[i].exam_id == exam_id && records[i].stud_id == stud_id) cout << "student: " << records[i].stud_id 
+        << ", discipline: " << disciplines[records[i].exam_id] << ", exam score: "
+        << records[i].exam_score << ", activity_score: " << records[i].activity_score << ", mark: " << records[i].exam_mark << endl;
+    }
+}
