@@ -10,27 +10,27 @@ class List
 private:
 	int data;
 	List* next;
-	int size;
 public:
-	List(List* nextObj = nullptr, int data = 0) {
+	List(List* nextObj = nullptr, int data = 0){
 		this->data = data;
 		next = nextObj;
-		size = 1;
 	}
 
-	~List() { if (next) delete next; }
+	//~List(){ 
+	//	if(next) delete next; 
+	//}
 
-	void setData(int data) {
+	void setData(int data){
 		this->data = data;
 	}
-	int getData() {
+	int getData(){
 		return data;
 	}
-	int operator[](int i) {
-		if (i < 0) throw out_of_range("out of range");
+	int operator[](int i){
+		if(i < 0) throw out_of_range("out of range");
 		List* zeroObj = this;
-		while (i > 0) {
-			if (zeroObj->next) {
+		while(i > 0){
+			if(zeroObj->next){
 				i--;
 				zeroObj = zeroObj->next;
 			}
@@ -38,113 +38,121 @@ public:
 		}
 		return (zeroObj->data);
 	}
-	void setNext(List* next) {
-		if (this->next) delete (this->next);
+	void setNext(List* next){
+		if(this->next) delete (this->next);
 		this->next = next;
 	}
-	List* getNext() {
+	List* getNext(){
 		return next;
 	}
-	int getSize() {
-		return size;
-	}
 
-	List* addFront(List* newObj = new List(nullptr, 0)) {
-		if (newObj->next) delete newObj->next; //lazy variant
+	List* addFront(List* newObj = new List(nullptr, 0)){
+		if(newObj->next) delete newObj->next; //lazy variant
 		newObj->next = this;
-		if (this) newObj->size = newObj->next->size + 1;
 		return newObj;
 	}
-	List* addFront(int data = 0, List* newObj = new List(nullptr, 0)) { //don't know how to make without returning List*
+	List* addFront(int data = 0, List* newObj = new List(nullptr, 0)){ //don't know how to make without returning List*
 		newObj->data = data;
 		newObj->next = this;
-		if (this) newObj->size = newObj->next->size + 1;
 		return newObj;
 	}
 
-	void add(List* newObj = new List(nullptr, 0)) {
+	void add(List* newObj = new List(nullptr, 0)){
 		List* tmp = this;
-		while (tmp->next) tmp = tmp->next;
+		while(tmp->next) tmp = tmp->next;
 		tmp->next = newObj;
 	}
-	void add(int data = 0, List* newObj = new List(nullptr, 0)) {
+	void add(int data = 0, List* newObj = new List(nullptr, 0)){
 		List* tmp = this;
-		while (tmp->next) tmp = tmp->next;
+		while(tmp->next) tmp = tmp->next;
 		newObj->data = data;
 		tmp->next = newObj;
 	}
 
-	void print() {
+	void print(){
 		cout << this->data << endl;
-		List* tmp = this;
-		while (tmp->next) {
-			tmp = (tmp->next);
-			cout << tmp->data << endl;
-		}
+		//List* tmp = this;
+		if(next) next->print();
 	}
 
-	void splitByX(int x, vector<int>& lessX, vector<int>& moreX) {
+	void splitByX(int x, vector<int>& lessX, vector<int>& moreX){
 		List* tmp = this;
 		lessX.clear();
 		moreX.clear();
-		if (tmp->data <= x) lessX.push_back(tmp->data);
+		if(tmp->data <= x) lessX.push_back(tmp->data);
 		else moreX.push_back(tmp->data);
-		while (tmp->next) {
+		while(tmp->next){
 			tmp = tmp->next;
-			if (tmp->data <= x) lessX.push_back(tmp->data);
+			if(tmp->data <= x) lessX.push_back(tmp->data);
 			else moreX.push_back(tmp->data);
 		}
 		lessX.shrink_to_fit();
 		moreX.shrink_to_fit();
 	}
 
-	int find(int x) {
+	int find(int x){
 		int i = 0;
 		List* tmp = this;
-		if (tmp->data == x) return i;
-		while (tmp->next) {
+		if(tmp->data == x) return i;
+		while(tmp->next){
 			tmp = tmp->next;
-			if (tmp->data == x) return i;
+			if(tmp->data == x) return i;
 		}
 		return -1;
 	}
 
-	void killClones() { // O(n^2)
+	void killClones(){ // O(n^2)
 		List* iptr = this;
-		if (iptr->next) {
+		if(iptr->next){
 			List* preJptr = iptr;
 			List* jptr;
-			while (preJptr->next) {
+			while(preJptr->next){
 				jptr = preJptr->next;
-				if (jptr->data == iptr->data) {
+				if(jptr->data == iptr->data){
 
-					if (jptr->next) preJptr->next = jptr->next; //deleting a list member
+					if(jptr->next) preJptr->next = jptr->next; //deleting a list member
 					else preJptr->next = nullptr;
 					jptr->next = nullptr;
 					delete jptr;
 				}
-				else {
+				else{
 					preJptr = jptr;
 				}
 			}
 		}
-		while (iptr->next) {
+		while(iptr->next){
 			iptr = iptr->next;
 			List* preJptr = iptr;
 			List* jptr;
-			while (preJptr->next) {
+			while(preJptr->next){
 				jptr = preJptr->next;
-				if (jptr->data == iptr->data) {
-					if (jptr->next) preJptr->next = jptr->next; //deleting a list member
+				if(jptr->data == iptr->data){
+					if(jptr->next) preJptr->next = jptr->next; //deleting a list member
 					else preJptr->next = nullptr;
 					jptr->next = nullptr;
 					delete jptr;
 				}
-				else {
+				else{
 					preJptr = jptr;
 				}
 			}
 		}
+	}
+
+	int size(){
+		int s = 1;
+		List* tmp = this;
+		while(tmp->next){
+			tmp = tmp->next;
+			s++;
+		}
+		return s;
+	}
+
+	void killLast(){
+		if(!this) return;
+		if(next) next->killLast();
+		else delete(this);
 	}
 };
 
@@ -180,8 +188,10 @@ string strBracket(string s) {
 	return(ans);
 }
 
-List* deleteNLast(List* list, int n) {
-	
+void deleteNLast(List* list, int n) {
+	for(int i =0; i < n; i++){
+		list->killLast();
+	}
 }
 
 int main() {
@@ -199,6 +209,12 @@ int main() {
 		cin >> tmp;
 		list = list->addFront(tmp);
 	}
+	cout << endl;
+	cout << "insert d - number of deaths" << endl;
+	cin >> n;
+	//deleteNLast(list, n);
+	list->killLast();
+	list->print();
 	cout << endl;
 	return 0;
 }

@@ -9,12 +9,10 @@ class List
 private:
 	int data;
 	List* next;
-	int size;
 public:
 	List(List* nextObj = nullptr, int data = 0){
 		this->data = data;
 		next = nextObj;
-		size = 1;
 	}
 
 	~List(){ if(next) delete next; }
@@ -44,20 +42,15 @@ public:
 	List* getNext(){
 		return next;
 	}
-	int getSize(){
-		return size;
-	}
 
 	List* addFront(List* newObj = new List(nullptr, 0)){
 		if(newObj->next) delete newObj->next; //lazy variant
 		newObj->next = this;
-		if(this) newObj->size = newObj->next->size + 1;
 		return newObj;
 	}
 	List* addFront(int data = 0, List* newObj = new List(nullptr, 0)){ //don't know how to make without returning List*
 		newObj->data = data;
 		newObj->next = this;
-		if(this) newObj->size = newObj->next->size + 1;
 		return newObj;
 	}
 
@@ -76,10 +69,7 @@ public:
 	void print(){
 		cout << this->data << endl;
 		List* tmp = this;
-		while(tmp->next){
-			tmp = (tmp->next);
-			cout << tmp->data << endl;
-		}
+		if(tmp->next) tmp->next->print();
 	}
 
 	void splitByX(int x, vector<int>& lessX, vector<int>& moreX){
@@ -144,6 +134,24 @@ public:
 				}
 			}
 		}
+	}
+
+	int size(){
+		int s = 1;
+		List* tmp = this;
+		while(tmp->next){
+			tmp = tmp->next;
+			s++;
+		}
+		return s;
+	}
+
+	void killLast(){
+		List* tmp = this;
+		while(tmp->next){
+			tmp = tmp->next;
+		}
+		delete tmp;
 	}
 };
 
