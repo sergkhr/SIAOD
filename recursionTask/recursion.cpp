@@ -16,9 +16,9 @@ public:
 		next = nextObj;
 	}
 
-	//~List(){ 
-	//	if(next) delete next; 
-	//}
+	~List(){ 
+		delete next; 
+	}
 
 	void setData(int data){
 		this->data = data;
@@ -149,10 +149,24 @@ public:
 		return s;
 	}
 
-	void killLast(){
-		if(!this) return;
-		if(next) next->killLast();
-		else delete(this);
+	List* killLast(){ //caution delete does not make previous pointers into nullptr
+		if(!this) return nullptr;
+		if (this->size() == 1) {
+			this->data = 0; //inthis variant size cannot go lower than 1
+		}
+		else if (this->size() == 2) {
+			delete this->next;
+			this->next = nullptr;
+		}
+		else {
+			List* pretmp = this;
+			while (pretmp->next->next) {
+				pretmp = pretmp->next; //pretmp will be the obj before last
+			}
+			delete pretmp->next;
+			pretmp->next = nullptr;
+		}
+		return this;
 	}
 };
 
@@ -190,8 +204,14 @@ string strBracket(string s) {
 
 void deleteNLast(List* list, int n) {
 	for(int i =0; i < n; i++){
-		list->killLast();
+		list = list->killLast();
 	}
+}
+
+void deleteLast(List* list) {
+	List* tmp = list;
+	while (tmp->getNext()) tmp = tmp->getNext();
+	delete tmp;
 }
 
 int main() {
@@ -212,9 +232,14 @@ int main() {
 	cout << endl;
 	cout << "insert d - number of deaths" << endl;
 	cin >> n;
-	//deleteNLast(list, n);
-	list->killLast();
 	list->print();
+	cout << endl;
+
+	//deleteLast(list);
+	deleteNLast(list, n);
+	//list = list->killLast();
+	list->print();
+	//delete list;
 	cout << endl;
 	return 0;
 }
