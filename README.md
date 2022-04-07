@@ -6,3 +6,4 @@
 4) structTask
 5) listTask
 6) recursionTask
+7) stackQueueTask
