@@ -2,6 +2,23 @@
     "files.associations": {
         "*.vue": "html",
         "iostream": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "array": "cpp",
+        "chrono": "cpp",
+        "format": "cpp",
+        "forward_list": "cpp",
+        "initializer_list": "cpp",
+        "list": "cpp",
+        "xtree": "cpp",
+        "xutility": "cpp",
+        "locale": "cpp",
+        "xlocale": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp",
+        "string": "cpp"
     }
 }

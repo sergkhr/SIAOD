@@ -8,3 +8,4 @@
 6) recursionTask
 7) stackQueueTask
 8) sortTask
+9) searchTask
