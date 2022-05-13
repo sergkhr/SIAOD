@@ -9,3 +9,4 @@
 7) stackQueueTask
 8) sortTask
 9) searchTask
+10) textTask
